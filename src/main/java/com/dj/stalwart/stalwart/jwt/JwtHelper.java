@@ -19,22 +19,22 @@ public class JwtHelper {
     @Value("${jwt.expiration.minutes}")
     private Long expiration;
 
-    public String generateToken(String username) {
+    public String generateToken(long username) {
         return Jwts.builder()
-                .setSubject(username)
+                .setSubject(username + "")
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + (expiration * 1000 * 60)))
                 .signWith(Keys.hmacShaKeyFor(secret.getBytes()), SignatureAlgorithm.HS512)
                 .compact();
     }
 
-    public Boolean validateToken(String token, String username) {
-        final String extractedUsername = extractUsername(token);
-        return (extractedUsername.equals(username) && ! isTokenExpired(token));
+    public Boolean validateToken(String token, Long username) {
+        final Long extractedUsername = extractUsername(token);
+        return (extractedUsername.equals(username) && !isTokenExpired(token));
     }
 
-    public String extractUsername(String token) {
-        return extractClaim(token, Claims::getSubject);
+    public Long extractUsername(String token) {
+        return Long.parseLong(extractClaim(token, Claims::getSubject));
     }
 
     private <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {

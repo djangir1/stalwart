@@ -1,5 +1,6 @@
 package com.dj.stalwart.stalwart.jwt;
 
+import com.dj.stalwart.stalwart.service.LoginService;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.MalformedJwtException;
 import jakarta.servlet.FilterChain;
@@ -26,20 +27,21 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private JwtHelper jwtHelper;
 
     @Autowired
-    private UserDetailsService userDetailsService;
+    private LoginService loginService;
+
+    @Autowired
+    private CustomUserDetailsService userDetailsService;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String requestHeader = request.getHeader("Authorization");
-        String username = null;
+        Long contactNo = null;
         String token = null;
         if (requestHeader != null && requestHeader.startsWith("Bearer")) {
-            //looking good
+
             token = requestHeader.substring(7);
             try {
-
-                username = this.jwtHelper.extractUsername(token);
-
+                contactNo = this.jwtHelper.extractUsername(token);
             } catch (IllegalArgumentException e) {
                 System.out.println("Illegal Argument while fetching the username !!");
                 e.printStackTrace();
@@ -51,15 +53,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 e.printStackTrace();
             } catch (Exception e) {
                 e.printStackTrace();
-
             }
         } else {
             System.out.println("Invalid Header Value !! ");
         }
-        if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+        if (contactNo != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             //fetch user detail from username
-            UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
-            Boolean validateToken = this.jwtHelper.validateToken(token, username);
+            UserDetails userDetails = this.userDetailsService.loadUserByUsername(contactNo + "");
+            Boolean validateToken = this.jwtHelper.validateToken(token, contactNo);
             if (validateToken) {
                 //set the authentication
                 UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());

@@ -6,4 +6,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface LoginRepository extends CrudRepository<Login, Integer> {
+
+    Login findByContactNo(long contactNo);
+
 }

@@ -35,4 +35,9 @@ public class LoginService {
     public Login getLoginById(int id) {
         return loginRepository.findById(id).get();
     }
+
+    // return login by contactNo
+    public Login getLoginByContactNo(long contactNo) {
+        return loginRepository.findByContactNo(contactNo);
+    }
 }
