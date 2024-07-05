@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 @Data
 @Entity
@@ -35,8 +36,8 @@ public class Login {
     private String status;
 
     @Column(name = "createdTS")
-    private Timestamp createdTS;
+    private LocalDateTime createdTS;
 
     @Column(name = "updatedTS")
-    private Timestamp updatedTS;
+    private LocalDateTime updatedTS;
 }
