@@ -27,7 +27,7 @@ public class PatientController {
     private LoginService loginService;
 
 
-    @GetMapping("/addDetails")
+    @PostMapping("/addDetails")
     public @ResponseBody NewPatientDetailsResponse addPatient(@RequestBody NewPatientDetailsRequest newPatientRequestBody) {
         Validate.notNull(newPatientRequestBody, "Request body cannot be null");
         var contactNoStr = newPatientRequestBody.getContactNo() + "";

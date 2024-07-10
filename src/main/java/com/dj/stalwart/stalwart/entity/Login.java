@@ -19,25 +19,25 @@ public class Login {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(name = "contactNo", unique = true, nullable = false)
+    @Column(name = "CONTACT_NO", unique = true, nullable = false)
     private long contactNo;
 
-    @Column(name = "roleGroupId")
+    @Column(name = "ROLE_GROUP_ID")
     private Integer roleGroupId;
 
-    @Column(name = "detailId")
+    @Column(name = "DETAIL_ID")
     private long detailId;
 
-    @Column(name = "detailType")
+    @Column(name = "DETAIL_TYPE")
     private String detailType;
 
-    @Column(name = "status", nullable = false)
+    @Column(name = "STATUS", nullable = false)
     private String status;
 
-    @Column(name = "createdTS")
+    @Column(name = "CREATED_TS")
     private LocalDateTime createdTS;
 
-    @Column(name = "updatedTS")
+    @Column(name = "UPDATED_TS")
     private LocalDateTime updatedTS;
 
     @PrePersist
