@@ -40,4 +40,8 @@ public class LoginService {
     public Login getLoginByContactNo(long contactNo) {
         return loginRepository.findByContactNo(contactNo);
     }
+
+    public int updateLoginStatus(long loginId, String status, long detailId, String detailType) {
+        return loginRepository.updateLoginStatusAndDetailsById(loginId, status, detailId, detailType);
+    }
 }
