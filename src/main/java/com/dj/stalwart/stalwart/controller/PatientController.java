@@ -5,9 +5,11 @@ import com.dj.stalwart.stalwart.http.request.NewPatientDetailsRequest;
 import com.dj.stalwart.stalwart.http.response.NewPatientDetailsResponse;
 import com.dj.stalwart.stalwart.jwt.CustomUserDetails;
 import com.dj.stalwart.stalwart.jwt.CustomUserDetailsService;
+import com.dj.stalwart.stalwart.jwt.JwtHelper;
 import com.dj.stalwart.stalwart.service.DetailsRepoService;
 import com.dj.stalwart.stalwart.service.LoginService;
 import com.dj.stalwart.stalwart.utils.Constants;
+import jakarta.servlet.http.HttpServletRequest;
 import org.apache.commons.lang3.Validate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -24,16 +26,14 @@ public class PatientController {
     private DetailsRepoService detailsRepoService;
 
     @Autowired
-    private LoginService loginService;
-
+    private JwtHelper jwtHelper;
 
     @PostMapping("/addDetails")
-    public @ResponseBody NewPatientDetailsResponse addPatient(@RequestBody NewPatientDetailsRequest newPatientRequestBody) {
+    public @ResponseBody NewPatientDetailsResponse addPatient(HttpServletRequest request, @RequestBody NewPatientDetailsRequest newPatientRequestBody) {
         Validate.notNull(newPatientRequestBody, "Request body cannot be null");
-        var contactNoStr = newPatientRequestBody.getContactNo() + "";
         CustomUserDetails loginVal = null;
         try {
-            loginVal = userDetailsService.loadUserByUsername(contactNoStr);
+            loginVal = userDetailsService.loadUserByToken(request.getHeader("Authorization"));
         } catch (UsernameNotFoundException e) {
             return NewPatientDetailsResponse.builder()
                     .message("User not found. Please login first")
@@ -61,7 +61,6 @@ public class PatientController {
                 .linkedLoginId(-1)
                 .contactNo(loginObj.getContactNo())
                 .build();
-
 
         var detailsFromDB = detailsRepoService.saveDetailsWithLoginInfoUpdate(details, loginObj.getId());
 

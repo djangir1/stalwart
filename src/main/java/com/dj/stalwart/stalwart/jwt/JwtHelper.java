@@ -37,6 +37,10 @@ public class JwtHelper {
         return Long.parseLong(extractClaim(token, Claims::getSubject));
     }
 
+    public Long extractUserNameByBererToken(String token) {
+        return Long.parseLong(extractClaim(token.substring(7), Claims::getSubject));
+    }
+
     private <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
         final Claims claims = extractAllClaims(token);
         return claimsResolver.apply(claims);

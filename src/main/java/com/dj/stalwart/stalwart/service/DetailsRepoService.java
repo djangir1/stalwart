@@ -26,11 +26,11 @@ public class DetailsRepoService {
         detailsRepository.findById(id).get();
     }
 
-    public void getDetailsByContactNo(long contactNo) {
-        detailsRepository.findByContactNo(contactNo);
+    public Details getDetailsByContactNo(long contactNo) {
+        return detailsRepository.findByContactNo(contactNo);
     }
 
-    public List<Details> getAllDetailsByLinkedLoginId(int linkedLoginId) {
+    public List<Details> getAllDetailsByLinkedLoginId(long linkedLoginId) {
         return detailsRepository.findByLinkedLoginId(linkedLoginId);
     }
 

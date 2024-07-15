@@ -9,7 +9,7 @@ import java.util.List;
 @Repository
 public interface DetailsRepository extends CrudRepository<Details, Integer> {
 
-    void findByContactNo(long contactNo);
+    Details findByContactNo(long contactNo);
 
-    List<Details> findByLinkedLoginId(int linkedLoginId);
+    List<Details> findByLinkedLoginId(long linkedLoginId);
 }

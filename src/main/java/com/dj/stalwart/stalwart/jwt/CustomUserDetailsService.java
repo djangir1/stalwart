@@ -13,6 +13,9 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Autowired
     private LoginService loginService;
 
+    @Autowired
+    private JwtHelper jwtHelper;
+
     @Override
     public CustomUserDetails loadUserByUsername(String contactNo) throws UsernameNotFoundException {
         Login login = loginService.getLoginByContactNo(Long.parseLong(contactNo));
@@ -20,5 +23,10 @@ public class CustomUserDetailsService implements UserDetailsService {
             throw new UsernameNotFoundException("User not found with contact number: " + contactNo);
         }
         return new CustomUserDetails(login);
+    }
+
+    public CustomUserDetails loadUserByToken(String token) throws UsernameNotFoundException {
+        String contactNoStr = jwtHelper.extractUserNameByBererToken(token) + "";
+        return loadUserByUsername(contactNoStr);
     }
 }
