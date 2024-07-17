@@ -10,6 +10,7 @@ public class Constants {
     public static final String LOGIN_STATUS_BLOCKED = "USER_BLOCKED";
 
     public static final String TABLE_TYPES_DETAILS = "DETAILS";
+    public static final String TABLE_TYPES_LOGIN = "LOGIN";
 
     public static final String APPOINTMENT_STATUS_OPEN = "OPEN";
     public static final String APPOINTMENT_STATUS_IN_PROGRESS = "IN_PROGRESS";

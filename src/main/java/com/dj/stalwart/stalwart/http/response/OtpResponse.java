@@ -1,6 +1,5 @@
 package com.dj.stalwart.stalwart.http.response;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -10,10 +9,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class JwtResponse {
-
-    private String jwtToken;
-    private long contactNo;
+public class OtpResponse {
     private String status;
     private String message;
+    private String userStatus;
+    private int responseCode;
 }

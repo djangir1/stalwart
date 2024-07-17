@@ -1,12 +1,14 @@
 package com.dj.stalwart.stalwart.controller;
 
 import com.dj.stalwart.stalwart.entity.Login;
+import com.dj.stalwart.stalwart.entity.TimedKeyDetails;
 import com.dj.stalwart.stalwart.http.request.JwtRequest;
 import com.dj.stalwart.stalwart.http.response.JwtResponse;
 import com.dj.stalwart.stalwart.jwt.CustomUserDetails;
 import com.dj.stalwart.stalwart.jwt.CustomUserDetailsService;
 import com.dj.stalwart.stalwart.jwt.JwtHelper;
 import com.dj.stalwart.stalwart.service.LoginService;
+import com.dj.stalwart.stalwart.service.TimedKeyDetailsService;
 import com.dj.stalwart.stalwart.utils.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -28,6 +30,9 @@ public class AuthController {
     @Autowired
     private LoginService loginService;
 
+    @Autowired
+    private TimedKeyDetailsService timedKeyDetailsService;
+
     @PostMapping("/login")
     public ResponseEntity<JwtResponse> login(@RequestBody JwtRequest request) {
         CustomUserDetails loginVal = null;
@@ -39,10 +44,12 @@ public class AuthController {
             loginService.saveLogin(newLogin);
         }
         String token = this.jwtHelper.generateToken(request.getContactNo());
+        timedKeyDetailsService.save(loginVal.getLogin().getId(), Constants.TABLE_TYPES_LOGIN);
         JwtResponse response = JwtResponse.builder()
                 .jwtToken(token)
                 .contactNo(request.getContactNo())
-                .status(loginVal.getLogin().getStatus()).build();
+                .status("OTP_SUCCESS")
+                .message("OTP sent successfully, valid for next 5 minutes.").build();
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
