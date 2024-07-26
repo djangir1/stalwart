@@ -20,4 +20,6 @@ public class MemberDetails {
     private LocalDate dob;
     private String age;
     private String userType;
+    private String message;
+    private int responseCode;
 }

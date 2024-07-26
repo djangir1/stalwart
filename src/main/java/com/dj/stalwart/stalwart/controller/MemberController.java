@@ -68,4 +68,33 @@ public class MemberController {
         activeUsersResponse.setResponseCode(200);
         return activeUsersResponse;
     }
+
+    @GetMapping("/getLoggedInUser")
+    public MemberDetails getLoggedInUserDetails(HttpServletRequest request) {
+        CustomUserDetails loginVal;
+        try {
+            loginVal = customUserDetailsService.loadUserByToken(request.getHeader("Authorization"));
+        } catch (UsernameNotFoundException e) {
+            return MemberDetails.builder()
+                    .message("User not found. Please login first")
+                    .responseCode(400)
+                    .build();
+        }
+        var loginObj = loginVal.getLogin();
+        Details mainUser = null;
+        if (Constants.TABLE_TYPES_DETAILS.equals(loginObj.getDetailType())){
+            mainUser = userDetailsService.getDetailsByContactNo(loginObj.getContactNo());
+        }
+        return MemberDetails.builder()
+                .id(loginObj.getId())
+                .age(userDetailsUtils.getAge(mainUser.getDob()))
+                .name(mainUser.getName())
+                .emailId(mainUser.getEmailId())
+                .contactNo(mainUser.getContactNo())
+                .gender(mainUser.getGender())
+                .dob(mainUser.getDob())
+                .message("User details fetched successfully")
+                .responseCode(200)
+                .userType(Constants.TABLE_TYPES_DETAILS).build();
+    }
 }
